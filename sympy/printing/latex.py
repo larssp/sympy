@@ -211,7 +211,7 @@ class LatexPrinter(Printer):
         if is_neg and strict:
             return r"\left({}\right)".format(self._print(item))
 
-        if (prec_val < level) or ((not strict) and prec_val <= level):
+        if (prec_val <= level) or ((not strict) and prec_val <= level):
             return r"\left({}\right)".format(self._print(item))
         else:
             return self._print(item)
