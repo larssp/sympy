@@ -675,6 +675,16 @@ def test_latex_derivatives():
     assert latex(diff(-diff(y**2,x,evaluate=False),x,evaluate=False)) == r'\frac{d}{d x} \left(- \frac{d}{d x} y^{2}\right)'
     assert latex(diff(diff(-diff(diff(y,x,evaluate=False),x,evaluate=False),x,evaluate=False),x,evaluate=False)) == \
         r'\frac{d^{2}}{d x^{2}} \left(- \frac{d^{2}}{d x^{2}} y\right)'
+    
+    # for non commutative sums and products
+    g = Function('g', commutative=False)
+    assert latex(Derivative(f(x), x) + g(x)) != latex(Derivative(f(x)+g(x), x))
+    assert latex(Derivative(f(x), x) + g(x)) == r'\frac{d}{d x} f{\left (x \right )} + g{\left (x \right )}'
+    assert latex(Derivative(f(x)+g(x), x))   == r'\frac{d}{d x} \left(f{\left (x \right )} + g{\left (x \right )}\right)'
+    
+    assert latex(Derivative(f(x), x) * g(x)) != latex(Derivative(f(x)*g(x), x))
+    assert latex(Derivative(f(x), x) * g(x)) == r'\frac{d}{d x} f{\left (x \right )} g{\left (x \right )}'
+    assert latex(Derivative(f(x)*g(x), x))   == r'\frac{d}{d x} \left(f{\left (x \right )} g{\left (x \right )}\right)'
 
     # use ordinary d when one of the variables has been integrated out
     assert latex(diff(Integral(exp(-x*y), (x, 0, oo)), y, evaluate=False)) == \
